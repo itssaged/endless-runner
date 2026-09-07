@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://bay1punb0kwby"]
+
+[ext_resource type="Script" uid="uid://curjaqf46ob1n" path="res://script/coin.gd" id="1_i64fm"]
+[ext_resource type="PackedScene" uid="uid://b1j25nbmgjpob" path="res://assets/COIN.glb" id="2_i64fm"]
+[ext_resource type="AudioStream" uid="uid://f0gituk6tr8m" path="res://assets/sounds/coin_collect.wav" id="3_11l1o"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_7l8v5"]
+
+[sub_resource type="Animation" id="Animation_i64fm"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("COIN:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("COIN:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_d14el"]
+resource_name = "collect"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("COIN:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.1),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.6666667),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"queue_free"
+}]
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AudioStreamPlayer3D")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_11l1o")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="Animation" id="Animation_11l1o"]
+resource_name = "idle"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("COIN:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 6.2831855, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_d14el"]
+_data = {
+&"RESET": SubResource("Animation_i64fm"),
+&"collect": SubResource("Animation_d14el"),
+&"idle": SubResource("Animation_11l1o")
+}
+
+[node name="COIN" type="Area3D" unique_id=2089302082]
+collision_layer = 4
+script = ExtResource("1_i64fm")
+
+[node name="COIN" parent="." unique_id=657641989 instance=ExtResource("2_i64fm")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1703714838]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0.046, 0.5, -0.048)
+shape = SubResource("SphereShape3D_7l8v5")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=343919211]
+libraries/ = SubResource("AnimationLibrary_d14el")
+autoplay = &"idle"
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=467298311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43478894, 0)
+light_color = Color(0.5659118, 0.87583435, 0.9946762, 1)
+shadow_enabled = true
+distance_fade_enabled = true
+omni_range = 0.8
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="." unique_id=607591742]
+
+[connection signal="area_shape_entered" from="." to="." method="_on_area_shape_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="child_entered_tree" from="COIN" to="." method="_on_coin_child_entered_tree"]

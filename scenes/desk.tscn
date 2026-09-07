@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://704apap2u5dq"]
+
+[ext_resource type="PackedScene" uid="uid://crbd8b5ugg4g" path="res://assets/7awagez/desk.fbx" id="1_0iqh6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6jxt7"]
+size = Vector3(3.7136168, 2.6760254, 2.055664)
+
+[node name="desk" type="Node3D" unique_id=414266453]
+transform = Transform3D(0.35, 0, 0, 0, 0.35, 0, 0, 0, 0.35, 0, 0, -0.7343087)
+
+[node name="desk" parent="." unique_id=1923323972 instance=ExtResource("1_0iqh6")]
+transform = Transform3D(0.99999994, 0, 0, 0, 1.245, 0, 0, 0, 0.99999994, 3.5775251, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=226515119 groups=["desk"]]
+transform = Transform3D(2, 0, 0, 0, 1.9000001, 0, 0, 0, 2.35, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=1968002719]
+transform = Transform3D(1, 0, 0, 0, 0.9999999, 0, 0, 0, 0.9999998, 0.014462492, 1.2900628, 1.0721679)
+shape = SubResource("BoxShape3D_6jxt7")

@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cgn1p32kdiepv"]
+
+[ext_resource type="Script" uid="uid://dkldmbh4873sy" path="res://script/player.gd" id="1_dqkch"]
+[ext_resource type="PackedScene" uid="uid://ddjfe5ejj637q" path="res://assets/player/Dying Backwards.fbx" id="2_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://di3ng6sptxjdk" path="res://assets/player/Jumping.fbx" id="3_tuyoq"]
+[ext_resource type="PackedScene" uid="uid://ch4dcova7tce4" path="res://assets/player/Fast Run (1).fbx" id="4_fjrip"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7l8v5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6jxt7"]
+
+[node name="player" type="CharacterBody3D" unique_id=543237696]
+script = ExtResource("1_dqkch")
+
+[node name="Dying Backwards" parent="." unique_id=484120102 instance=ExtResource("2_qlg0r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.21387863, 0, 0)
+
+[node name="Jumping" parent="." unique_id=1272758887 instance=ExtResource("3_tuyoq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.18410015, 0, 0)
+
+[node name="Fast Run" parent="." unique_id=1112253006 instance=ExtResource("4_fjrip")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1834817, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2052246232]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2588544, 0)
+visible = false
+mesh = SubResource("CapsuleMesh_7l8v5")
+
+[node name="collision" type="CollisionShape3D" parent="." unique_id=208875602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2588544, 0)
+shape = SubResource("CapsuleShape3D_6jxt7")
+
+[node name="camera_controller" type="Node3D" parent="." unique_id=1059905251]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1323977, 11.309648)
+
+[node name="camera_target" type="Node3D" parent="camera_controller" unique_id=917198163]
+
+[node name="Camera3D" type="Camera3D" parent="camera_controller/camera_target" unique_id=2121375477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 3.6350002)
