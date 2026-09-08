@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dtvwdjpuf7g0u"]
+
+[ext_resource type="PackedScene" uid="uid://b2g4sjc31mwen" path="res://assets/7awagez/panel.glb" id="1_2gewf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_7l8v5"]
+size = Vector3(2.2183423, 1.2351074, 4.0712795)
+
+[node name="panel2" unique_id=66304593 instance=ExtResource("1_2gewf")]
+transform = Transform3D(-6.9938224e-08, 0, 1.6, 0, 1.1200001, 0, -1.6, 0, -6.9938224e-08, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="panel" parent_id_path=PackedInt32Array(67826145) index="0" unique_id=725661094 groups=["panel"]]
+transform = Transform3D(0.962, -3.7252903e-09, 2.3283064e-10, 3.7252903e-09, 0.962, -7.450581e-09, -2.3283063e-10, 7.450581e-09, 0.962, 1.4901161e-07, -0.060968116, 0.6217015)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="panel/StaticBody3D" index="0" unique_id=932551620]
+transform = Transform3D(1, 1.1101365e-06, 5.9138983e-08, 2.6077032e-08, 1.0000057, 4.61936e-07, -8.1490725e-09, -4.4330955e-07, 1.0000163, 0.09046894, 0.0041159987, -0.631181)
+shape = SubResource("BoxShape3D_7l8v5")

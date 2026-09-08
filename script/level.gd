@@ -14,8 +14,13 @@ var corridor: PackedScene = preload(
 # SETTINGS
 # =========================================================
 
+# طول الـ corridor الواحد
 @export var offset: float = 58.0
-@export var spawn_ahead: float = 174.0
+
+# كام متر نعمل Spawn قدام اللاعب
+@export var spawn_ahead: float = 300.0
+
+# امسح الـ corridors اللي ورا اللاعب بمسافة
 @export var delete_behind: float = 70.0
 
 
@@ -41,7 +46,10 @@ func _ready() -> void:
 		return
 
 
-	# أول Corridor يبدأ عند اللاعب
+	# =====================================================
+	# START
+	# =====================================================
+
 	next_spawn_z = player.global_position.z
 
 
@@ -80,15 +88,18 @@ func _process(delta: float) -> void:
 
 		if child is Node3D:
 
-			child.position.z -= Global.game_speed * delta
+			child.position.z -= (
+				Global.game_speed * delta
+			)
 
 
 	# =====================================================
 	# MOVE VIRTUAL SPAWN POSITION
 	# =====================================================
 
-	# لأن اللاعب ثابت والـworld هو اللي بيتحرك
-	next_spawn_z -= Global.game_speed * delta
+	next_spawn_z -= (
+		Global.game_speed * delta
+	)
 
 
 	# =====================================================
@@ -110,7 +121,11 @@ func _process(delta: float) -> void:
 
 		if child is Node3D:
 
-			if child.global_position.z < player.global_position.z - delete_behind:
+			if child.global_position.z < (
+				player.global_position.z
+				-
+				delete_behind
+			):
 
 				child.queue_free()
 
@@ -123,10 +138,20 @@ func spawn_corridor(z_position: float) -> void:
 
 	var instance := corridor.instantiate() as Node3D
 
+	if instance == null:
+
+		push_error(
+			"Failed to instantiate corridor!"
+		)
+
+		return
+
+
 	instance.position = Vector3(
-		0,
-		0,
+		0.0,
+		0.0,
 		z_position
 	)
+
 
 	add_child(instance)

@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bvx3pq6vru6ga"
+path="res://.godot/imported/Hen Sound To Attract Roosters  Chicken Sound Effects Free (mp3cut.net).mp3-56ac6504086afa28225a08439b14ca1a.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/Hen Sound To Attract Roosters  Chicken Sound Effects Free (mp3cut.net).mp3"
+dest_files=["res://.godot/imported/Hen Sound To Attract Roosters  Chicken Sound Effects Free (mp3cut.net).mp3-56ac6504086afa28225a08439b14ca1a.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

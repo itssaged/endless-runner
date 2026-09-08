@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://bl3a5yr2wnge4"]
 
 [ext_resource type="Script" uid="uid://ce6la4b3mn5j1" path="res://script/number_1.gd" id="1_c0yj0"]
-[ext_resource type="PackedScene" uid="uid://n224ivrw33ig" path="res://assets/1.glb" id="1_jo87w"]
+[ext_resource type="PackedScene" uid="uid://n224ivrw33ig" path="res://assets/corridor/1.glb" id="1_jo87w"]
 [ext_resource type="Texture2D" uid="uid://mah25ooo7qgi" path="res://assets/texture_01.png" id="3_ofcfw"]
-[ext_resource type="PackedScene" uid="uid://bay1punb0kwby" path="res://scenes/coin.tscn" id="5_oh074"]
-[ext_resource type="PackedScene" uid="uid://upwqonebp8e4" path="res://assets/CORRIDOR.glb" id="6_d4jsf"]
+[ext_resource type="PackedScene" uid="uid://upwqonebp8e4" path="res://assets/corridor/CORRIDOR.glb" id="6_d4jsf"]
+[ext_resource type="PackedScene" uid="uid://dtvwdjpuf7g0u" path="res://scenes/panel_2.tscn" id="6_evww8"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e38b3"]
 albedo_texture = ExtResource("3_ofcfw")
@@ -22,17 +22,17 @@ script = ExtResource("1_c0yj0")
 
 [node name="Node" type="Node" parent="." unique_id=1622856154]
 
-[node name="COIN" parent="Node" unique_id=2089302082 instance=ExtResource("5_oh074")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1467481, 0, -57.305218)
-
 [node name="RIGHT" type="Marker3D" parent="Node" unique_id=1798412819]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.739, 0, 0)
+visible = false
 
 [node name="LEFT" type="Marker3D" parent="Node" unique_id=939635779]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.166, 0, 0)
+visible = false
 
 [node name="MID" type="Marker3D" parent="Node" unique_id=1362185399]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.147, 0, 0)
+visible = false
 
 [node name="1" parent="." unique_id=856759695 instance=ExtResource("1_jo87w")]
 transform = Transform3D(3.105, 0, 0, 0, 2, 0, 0, 0, 1.6819882, -3.9327717, -1.5, 0)
@@ -43,6 +43,7 @@ transform = Transform3D(-0.745, -1.12491875e-07, 0, 1.12491875e-07, -0.745, 0, 0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1208614306]
 transform = Transform3D(1, -3.4390268e-12, 0, 3.4390268e-12, 1, 0, 0, 0, 1, -0.95788705, 0.3559885, -0.06302357)
+visible = false
 material_override = SubResource("StandardMaterial3D_e38b3")
 mesh = SubResource("BoxMesh_7l8v5")
 
@@ -54,12 +55,19 @@ shape = SubResource("BoxShape3D_7l8v5")
 
 [node name="lane three" type="Marker3D" parent="Node2" unique_id=870060648]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.037, -1.5, 0)
+visible = false
 
 [node name="lane two" type="Marker3D" parent="Node2" unique_id=1503181209]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.768, -1.5, 0)
+visible = false
 
 [node name="lane one" type="Marker3D" parent="Node2" unique_id=1809974934]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.522, -1.5, 0)
+visible = false
 
 [node name="CORRIDOR2" parent="." unique_id=1075300543 instance=ExtResource("6_d4jsf")]
 transform = Transform3D(3.136, 0, 0, 0, 2.1, 0, 0, 0, 1.701, -3.9804125, -1.4993596, 0)
+
+[node name="panel2" parent="." unique_id=66304593 instance=ExtResource("6_evww8")]
+transform = Transform3D(-7.430936e-08, 0, 1.7, 0, 1.19, 0, -1.7, 0, -7.430936e-08, 0, -1.4409888, 0)
+visible = false
