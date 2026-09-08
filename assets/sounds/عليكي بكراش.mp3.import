@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://dkfoekery57t0"
+path="res://.godot/imported/عليكي بكراش.mp3-b4bd1c5aa94e6355631b7e4f57c496f4.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/عليكي بكراش.mp3"
+dest_files=["res://.godot/imported/عليكي بكراش.mp3-b4bd1c5aa94e6355631b7e4f57c496f4.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

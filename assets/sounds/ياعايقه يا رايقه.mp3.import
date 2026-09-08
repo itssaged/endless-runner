@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://b8t7jj8yp7d0o"
+path="res://.godot/imported/ياعايقه يا رايقه.mp3-d85100569581411fa6ee42abf6de565d.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/ياعايقه يا رايقه.mp3"
+dest_files=["res://.godot/imported/ياعايقه يا رايقه.mp3-d85100569581411fa6ee42abf6de565d.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

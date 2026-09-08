@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://c5uri1d6ki368"
+path="res://.godot/imported/last song.mp3-9b734d5f80772a436b955cf9411898ce.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/last song.mp3"
+dest_files=["res://.godot/imported/last song.mp3-9b734d5f80772a436b955cf9411898ce.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

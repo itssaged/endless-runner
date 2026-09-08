@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://xo1ow1h0bpjj"
+path="res://.godot/imported/ali ya ali .mp3-d09e0bf696699ef8cb557fee3f352f98.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/ali ya ali .mp3"
+dest_files=["res://.godot/imported/ali ya ali .mp3-d09e0bf696699ef8cb557fee3f352f98.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
