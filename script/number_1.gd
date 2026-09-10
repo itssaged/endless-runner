@@ -1,61 +1,26 @@
 extends Node3D
 
-
-# =========================================================
-# SCENES
-# =========================================================
-
 var desk_scene: PackedScene = preload("res://scenes/desk.tscn")
 var fire_extinguisher_scene: PackedScene = preload("res://scenes/fire_extinguisher.tscn")
 var panel2_scene: PackedScene = preload("res://scenes/panel_2.tscn")
 var coin_scene: PackedScene = preload("res://scenes/coin.tscn")
 
-
-# =========================================================
-# LANES
-# =========================================================
-
 @onready var left_point: Marker3D = $"Node2/lane one"
 @onready var middle_point: Marker3D = $"Node2/lane two"
 @onready var right_point: Marker3D = $"Node2/lane three"
 
-
-# =========================================================
-# CORRIDOR
-# =========================================================
-
 @export var corridor_length: float = 58.0
-
-
-# =========================================================
-# NO SPAWN ZONE
-# =========================================================
 
 @export var no_spawn_until_global_z: float = 100.0
 
-
-# =========================================================
-# OBSTACLE SETTINGS
-# =========================================================
-
 @export var min_z_distance: float = 8.0
 @export var minimum_desk_distance: float = 4.0
-
-
-# =========================================================
-# OBSTACLE CHANCES
-# =========================================================
 
 @export_range(0.0, 1.0)
 var fire_extinguisher_chance: float = 0.3
 
 @export_range(0.0, 1.0)
 var panel2_chance: float = 0.2
-
-
-# =========================================================
-# COINS
-# =========================================================
 
 @export var min_coins: int = 5
 @export var max_coins: int = 13
@@ -67,17 +32,7 @@ var panel2_chance: float = 0.2
 
 @export var desk_safe_distance: float = 3.0
 
-
-# =========================================================
-# SAVED OBSTACLE POSITIONS
-# =========================================================
-
 var desk_positions: Array[Dictionary] = []
-
-
-# =========================================================
-# READY
-# =========================================================
 
 func _ready() -> void:
 
@@ -86,20 +41,10 @@ func _ready() -> void:
 	generate_desks()
 	generate_coins()
 
-
-# =========================================================
-# PROCESS
-# =========================================================
-
 func _process(_delta: float) -> void:
 
 	if not Global.game_on:
 		return
-
-
-# =========================================================
-# CHECK GLOBAL Z
-# =========================================================
 
 func is_spawn_allowed(local_position: Vector3) -> bool:
 
@@ -109,11 +54,6 @@ func is_spawn_allowed(local_position: Vector3) -> bool:
 
 	return global_position_of_object.z >= no_spawn_until_global_z
 
-
-# =========================================================
-# DESKS / FIRE / PANEL2
-# =========================================================
-
 func generate_desks() -> void:
 
 	var lanes: Array[Marker3D] = [
@@ -122,20 +62,9 @@ func generate_desks() -> void:
 		right_point
 	]
 
-
-	# =====================================================
-	# GAME TIME
-	# =====================================================
-
 	var game_time: float = Global.game_time
 
-
-	# =====================================================
-	# NUMBER OF GROUPS
-	# =====================================================
-
 	var groups: int = 2
-
 
 	if game_time >= 15.0:
 		groups = 3
@@ -152,13 +81,7 @@ func generate_desks() -> void:
 	if game_time >= 90.0:
 		groups = 4
 
-
-	# =====================================================
-	# MIN DISTANCE
-	# =====================================================
-
 	var current_min_distance: float = min_z_distance
-
 
 	if game_time >= 15.0:
 		current_min_distance = 7.0
@@ -175,43 +98,25 @@ func generate_desks() -> void:
 	if game_time >= 90.0:
 		current_min_distance = minimum_desk_distance
 
-
 	current_min_distance = max(
 		current_min_distance,
 		minimum_desk_distance
 	)
 
-
-	# =====================================================
-	# USED Z POSITIONS
-	# =====================================================
-
 	var used_z_positions: Array[float] = []
 
 	var attempts: int = 0
 
-
-	# =====================================================
-	# GENERATE GROUPS
-	# =====================================================
-
 	while used_z_positions.size() < groups and attempts < 1000:
 
 		attempts += 1
-
 
 		var chosen_z: float = randf_range(
 			2.0,
 			corridor_length - 2.0
 		)
 
-
 		var valid_z: bool = true
-
-
-		# =================================================
-		# CHECK DISTANCE BETWEEN GROUPS
-		# =================================================
 
 		for used_z: float in used_z_positions:
 
@@ -220,14 +125,8 @@ func generate_desks() -> void:
 				valid_z = false
 				break
 
-
 		if not valid_z:
 			continue
-
-
-		# =================================================
-		# CHECK SAFE ZONE
-		# =================================================
 
 		var test_local_position: Vector3 = Vector3(
 			0.0,
@@ -235,21 +134,13 @@ func generate_desks() -> void:
 			chosen_z
 		)
 
-
 		if not is_spawn_allowed(test_local_position):
 
 			continue
 
-
 		used_z_positions.append(chosen_z)
 
-
-		# =================================================
-		# NUMBER OF OBSTACLES
-		# =================================================
-
 		var obstacle_amount: int = 1
-
 
 		if game_time < 15.0:
 
@@ -271,26 +162,15 @@ func generate_desks() -> void:
 
 			obstacle_amount = randi_range(2, 3)
 
-
 		obstacle_amount = clamp(
 			obstacle_amount,
 			1,
 			3
 		)
 
-
-		# =================================================
-		# SHUFFLE LANES
-		# =================================================
-
 		var shuffled_lanes: Array[Marker3D] = lanes.duplicate()
 
 		shuffled_lanes.shuffle()
-
-
-		# =================================================
-		# SPAWN OBSTACLES
-		# =================================================
 
 		for i: int in range(obstacle_amount):
 
@@ -298,22 +178,12 @@ func generate_desks() -> void:
 
 			var random_obstacle: float = randf()
 
-
-			# =================================================
-			# PANEL2
-			# =================================================
-
 			if random_obstacle < panel2_chance:
 
 				spawn_panel2(
 					point,
 					chosen_z
 				)
-
-
-			# =================================================
-			# FIRE EXTINGUISHER
-			# =================================================
 
 			elif random_obstacle < (
 				panel2_chance
@@ -326,22 +196,12 @@ func generate_desks() -> void:
 					chosen_z
 				)
 
-
-			# =================================================
-			# DESK
-			# =================================================
-
 			else:
 
 				spawn_desk(
 					point,
 					chosen_z
 				)
-
-
-# =========================================================
-# SPAWN DESK
-# =========================================================
 
 func spawn_desk(
 	point: Marker3D,
@@ -352,18 +212,15 @@ func spawn_desk(
 		point.global_position
 	)
 
-
 	var local_spawn_position: Vector3 = Vector3(
 		marker_pos.x,
 		marker_pos.y,
 		z_position
 	)
 
-
 	if not is_spawn_allowed(local_spawn_position):
 
 		return
-
 
 	var desk: Node3D = desk_scene.instantiate() as Node3D
 
@@ -371,16 +228,10 @@ func spawn_desk(
 
 	add_child(desk)
 
-
 	desk_positions.append({
 		"x": marker_pos.x,
 		"z": z_position
 	})
-
-
-# =========================================================
-# SPAWN FIRE EXTINGUISHER
-# =========================================================
 
 func spawn_fire_extinguisher(
 	point: Marker3D,
@@ -391,41 +242,29 @@ func spawn_fire_extinguisher(
 		point.global_position
 	)
 
-
 	var local_spawn_position: Vector3 = Vector3(
 		marker_pos.x,
 		marker_pos.y,
 		z_position
 	)
 
-
 	if not is_spawn_allowed(local_spawn_position):
 
 		return
-
 
 	var fire_extinguisher: Node3D = (
 		fire_extinguisher_scene.instantiate()
 		as Node3D
 	)
 
-
 	fire_extinguisher.position = local_spawn_position
 
 	add_child(fire_extinguisher)
-
-
-	# Save it as an obstacle too
 
 	desk_positions.append({
 		"x": marker_pos.x,
 		"z": z_position
 	})
-
-
-# =========================================================
-# SPAWN PANEL2
-# =========================================================
 
 func spawn_panel2(
 	point: Marker3D,
@@ -436,42 +275,29 @@ func spawn_panel2(
 		point.global_position
 	)
 
-
 	var local_spawn_position: Vector3 = Vector3(
 		marker_pos.x,
 		marker_pos.y,
 		z_position
 	)
 
-
 	if not is_spawn_allowed(local_spawn_position):
 
 		return
-
 
 	var panel2: Node3D = (
 		panel2_scene.instantiate()
 		as Node3D
 	)
 
-
 	panel2.position = local_spawn_position
 
 	add_child(panel2)
-
-
-	# Save Panel2 as an obstacle
-	# so coins don't spawn inside it.
 
 	desk_positions.append({
 		"x": marker_pos.x,
 		"z": z_position
 	})
-
-
-# =========================================================
-# COINS
-# =========================================================
 
 func generate_coins() -> void:
 
@@ -481,11 +307,9 @@ func generate_coins() -> void:
 		right_point
 	]
 
-
 	var current_z: float = 0.0
 
 	var groups: int = randi_range(1, 3)
-
 
 	for group_index: int in range(groups):
 
@@ -494,24 +318,19 @@ func generate_coins() -> void:
 			max_coins
 		)
 
-
 		var group_length: float = (
 			(coin_count - 1) * coin_spacing
 		)
-
 
 		if current_z + group_length > corridor_length:
 
 			break
 
-
 		var shuffled_lanes: Array[Marker3D] = lanes.duplicate()
 
 		shuffled_lanes.shuffle()
 
-
 		var point: Marker3D = shuffled_lanes[0]
-
 
 		for i: int in range(coin_count):
 
@@ -519,7 +338,6 @@ func generate_coins() -> void:
 				current_z +
 				(i * coin_spacing)
 			)
-
 
 			if not is_coin_position_blocked(
 				point,
@@ -531,22 +349,15 @@ func generate_coins() -> void:
 					coin_z
 				)
 
-
 		var group_distance: float = randf_range(
 			min_coin_group_distance,
 			max_coin_group_distance
 		)
 
-
 		current_z += (
 			group_length +
 			group_distance
 		)
-
-
-# =========================================================
-# SPAWN COIN
-# =========================================================
 
 func spawn_coin(
 	point: Marker3D,
@@ -557,29 +368,21 @@ func spawn_coin(
 		point.global_position
 	)
 
-
 	var local_spawn_position: Vector3 = Vector3(
 		marker_pos.x,
 		marker_pos.y,
 		z_position
 	)
 
-
 	if not is_spawn_allowed(local_spawn_position):
 
 		return
-
 
 	var coin: Node3D = coin_scene.instantiate() as Node3D
 
 	coin.position = local_spawn_position
 
 	add_child(coin)
-
-
-# =========================================================
-# CHECK COIN / OBSTACLE
-# =========================================================
 
 func is_coin_position_blocked(
 	coin_lane: Marker3D,
@@ -590,9 +393,7 @@ func is_coin_position_blocked(
 		coin_lane.global_position
 	)
 
-
 	var coin_x: float = coin_pos.x
-
 
 	for desk_data: Dictionary in desk_positions:
 
@@ -600,21 +401,17 @@ func is_coin_position_blocked(
 			desk_data["x"]
 		)
 
-
 		var desk_z: float = float(
 			desk_data["z"]
 		)
-
 
 		var x_distance: float = abs(
 			desk_x - coin_x
 		)
 
-
 		var z_distance: float = abs(
 			desk_z - coin_z
 		)
-
 
 		if (
 			x_distance < 1.0
@@ -623,6 +420,5 @@ func is_coin_position_blocked(
 		):
 
 			return true
-
 
 	return false

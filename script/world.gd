@@ -1,10 +1,4 @@
-
 extends Node3D
-
-
-# =========================
-# UI
-# =========================
 
 @onready var coin_label: Label = $CanvasLayer/UI/Panel/Label
 @onready var score_label: Label = $CanvasLayer/UI/Panel2/Label
@@ -13,36 +7,15 @@ extends Node3D
 @onready var label_3: Label = $CanvasLayer/Control/Panel/Label3
 @onready var high_score_label: Label = $CanvasLayer/Control/Panel/highest_score
 
-
-# =========================
-# MUTE / UNMUTE
-# =========================
-
 @onready var mute: Button = $CanvasLayer/mute
 @onready var unmute: Button = $CanvasLayer/unmute
 
-# BG Track is a direct child of World
 @onready var bg_track: AudioStreamPlayer = $"BG TRACK"
-
-
-# =========================
-# SCORE
-# =========================
 
 var score: int = 0
 
-
-# =========================
-# GLOW
-# =========================
-
 var score_glow: bool = false
 var glow_time: float = 0.0
-
-
-# =========================
-# READY
-# =========================
 
 func _ready() -> void:
 	high_score_label.text = str(Global.high_score)
@@ -50,11 +23,6 @@ func _ready() -> void:
 	unmute.visible = false
 
 	score_label.modulate = Color.WHITE
-
-
-# =========================
-# PHYSICS
-# =========================
 
 func _physics_process(delta: float) -> void:
 
@@ -65,13 +33,6 @@ func _physics_process(delta: float) -> void:
 		score += 1
 		score_label.text = str(score)
 
-		# =========================
-		# HIGH SCORE CHECK
-		# =========================
-		#
-		# لو فيه High Score قديم فقط
-		# نبدأ نقارن معاه.
-		#
 		if Global.high_score > 0:
 
 			if score > Global.high_score:
@@ -82,11 +43,6 @@ func _physics_process(delta: float) -> void:
 
 					score_glow = true
 					glow_time = 0.0
-
-
-	# =========================
-	# SCORE GLOW EFFECT
-	# =========================
 
 	if score_glow:
 
@@ -103,11 +59,6 @@ func _physics_process(delta: float) -> void:
 			1.0
 		)
 
-
-# =========================
-# PLAYER DIED
-# =========================
-
 func _on_player_player_died() -> void:
 
 	$CanvasLayer/Control/AudioStreamPlayer3D.play()
@@ -117,18 +68,9 @@ func _on_player_player_died() -> void:
 
 	label_3.text = str(score)
 
-	# =========================
-	# SAVE HIGH SCORE
-	# =========================
-
 	if score > Global.high_score:
 
 		Global.high_score = score
-
-
-# =========================
-# RESTART
-# =========================
 
 func _on_button_pressed() -> void:
 
@@ -146,19 +88,9 @@ func _on_button_pressed() -> void:
 
 	get_tree().reload_current_scene()
 
-
-# =========================
-# QUIT
-# =========================
-
 func _on_button_2_pressed() -> void:
 
 	get_tree().quit()
-
-
-# =========================
-# MUTE
-# =========================
 
 func _on_mute_pressed() -> void:
 
@@ -167,11 +99,6 @@ func _on_mute_pressed() -> void:
 
 	mute.visible = false
 	unmute.visible = true
-
-
-# =========================
-# UNMUTE
-# =========================
 
 func _on_unmute_pressed() -> void:
 

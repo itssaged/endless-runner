@@ -1,10 +1,4 @@
-
 extends Node3D
-
-
-# =========================
-# START GAME
-# =========================
 
 func _on_button_pressed() -> void:
 	Global.reset_run()
@@ -17,22 +11,11 @@ func _on_button_pressed() -> void:
 		"res://scenes/world.tscn"
 	)
 
-
-# =========================
-# SECRET SOUND
-# =========================
-
 @onready var secret_sound: AudioStreamPlayer = $"CanvasLayer/floppa and chicken/Button2/AudioStreamPlayer"
-
 
 func _on_button_2_pressed() -> void:
 	if secret_sound:
 		secret_sound.play()
-
-
-# =========================
-# DANCE ROOT NODES
-# =========================
 
 @onready var dancing_twerk: Node3D = $"Dancing Twerk"
 @onready var twist_dance: Node3D = $"Twist Dance"
@@ -45,11 +28,6 @@ func _on_button_2_pressed() -> void:
 @onready var bellydancing: Node3D = $Bellydancing
 @onready var dancingg: Node3D = $"Dancing (1)"
 
-
-# =========================
-# ANIMATION PLAYERS
-# =========================
-
 @onready var dancing_twerk_anim: AnimationPlayer = $"Dancing Twerk/AnimationPlayer2"
 @onready var twist_dance_anim: AnimationPlayer = $"Twist Dance/AnimationPlayer2"
 @onready var thriller_part_2_anim: AnimationPlayer = $"Thriller Part 2/AnimationPlayer2"
@@ -61,65 +39,35 @@ func _on_button_2_pressed() -> void:
 @onready var bellydance_anim: AnimationPlayer = $"Bellydancing/AnimationPlayer2"
 @onready var dancingg_anim: AnimationPlayer = $"Dancing (1)/AnimationPlayer2"
 
-
-# =========================
-# MENU MUSIC PLAYER & SONGS
-# =========================
-
 @onready var menu_audio: AudioStreamPlayer = $AudioStreamPlayer
 
 var dance_songs: Array = [
-	preload("res://assets/sounds/مهرجان - سهران ليلاتي - ميسو ميسره - عمر id - مؤمن الجحيم - توزيع زيكو العالمي - مهرجانات 2024 (mp3cut.net).mp3"), # Index 0
-	preload("res://assets/sounds/ياعايقه يا رايقه.mp3"), # Index 1
-	preload("res://assets/sounds/اطبطب وادلع.mp3"), # Index 2
-	preload("res://assets/sounds/العوده من بعد الغياب.mp3"), # Index 3
-	preload("res://assets/sounds/عليكي بكراش.mp3"), # Index 4
-	preload("res://assets/sounds/شخبط شخابيط.mp3"), # Index 5
-	preload("res://assets/sounds/aghny-azaz-kaborya-.mp3"), # Index 6
-	preload("res://assets/sounds/nancy-ajram-ma-tegi-hena-official-music-video_yCY8T0qT.mp3"), # Index 7
-	preload("res://assets/sounds/ali ya ali .mp3"), # Index 8
-	preload("res://assets/sounds/last song.mp3") # Index 9
+	preload("res://assets/sounds/مهرجان - سهران ليلاتي - ميسو ميسره - عمر id - مؤمن الجحيم - توزيع زيكو العالمي - مهرجانات 2024 (mp3cut.net).mp3"),
+	preload("res://assets/sounds/ياعايقه يا رايقه.mp3"),
+	preload("res://assets/sounds/اطبطب وادلع.mp3"),
+	preload("res://assets/sounds/العوده من بعد الغياب.mp3"),
+	preload("res://assets/sounds/عليكي بكراش.mp3"),
+	preload("res://assets/sounds/شخبط شخابيط.mp3"),
+	preload("res://assets/sounds/aghny-azaz-kaborya-.mp3"),
+	preload("res://assets/sounds/nancy-ajram-ma-tegi-hena-official-music-video_yCY8T0qT.mp3"),
+	preload("res://assets/sounds/ali ya ali .mp3"),
+	preload("res://assets/sounds/last song.mp3")
 ]
 
-
-# =========================
-# CURRENT DANCE
-# =========================
-
 var current_dance: int = 0
-
-
-# =========================
-# READY
-# =========================
 
 func _ready() -> void:
 	_set_dance(0)
 
-
-# =========================
-# BUTTON 3
-# =========================
-
 func _on_button_3_pressed() -> void:
 	current_dance += 1
 
-	# عندنا 10 رقصات من 0 إلى 9
 	if current_dance > 9:
 		current_dance = 0
 
 	_set_dance(current_dance)
 
-
-# =========================
-# SET DANCE
-# =========================
-
 func _set_dance(index: int) -> void:
-
-	# =========================
-	# HIDE ALL DANCES
-	# =========================
 
 	if dancing_twerk:
 		dancing_twerk.visible = false
@@ -151,11 +99,6 @@ func _set_dance(index: int) -> void:
 	if dancingg:
 		dancingg.visible = false
 
-
-	# =========================
-	# STOP ALL ANIMATIONS
-	# =========================
-
 	if dancing_twerk_anim:
 		dancing_twerk_anim.stop()
 
@@ -185,11 +128,6 @@ func _set_dance(index: int) -> void:
 
 	if dancingg_anim:
 		dancingg_anim.stop()
-
-
-	# =========================
-	# SELECT DANCE
-	# =========================
 
 	match index:
 
@@ -233,36 +171,20 @@ func _set_dance(index: int) -> void:
 			dancingg.visible = true
 			_play_animation(dancingg_anim)
 
-
-	# =========================
-	# PLAY DANCE MUSIC
-	# =========================
-
 	if menu_audio and dance_songs.size() > 0:
 
 		var song_index = index % dance_songs.size()
 
 		menu_audio.stream = dance_songs[song_index]
 
-		# =========================
-		# VOLUME
-		# =========================
-
-		# Index 0 = الصوت الطبيعي
 		if song_index == 0:
 			menu_audio.volume_db = -20.0
 		elif song_index==2:
 			menu_audio.volume_db = -12.0
-		# كل الأغاني الأخرى = -24 dB
 		else:
 			menu_audio.volume_db = -20.0
 
 		menu_audio.play()
-
-
-# =========================
-# GET FIRST ANIMATION
-# =========================
 
 func _get_first_anim_name(
 	player_node: AnimationPlayer
@@ -276,11 +198,6 @@ func _get_first_anim_name(
 			return anim_list[0]
 
 	return ""
-
-
-# =========================
-# PLAY ANIMATION
-# =========================
 
 func _play_animation(
 	target_anim: AnimationPlayer

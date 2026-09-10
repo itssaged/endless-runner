@@ -4,11 +4,6 @@ signal player_died
 
 @export var run_speed: float = 0.0
 
-
-# =========================================================
-# CHICKEN
-# =========================================================
-
 @onready var chicken: Node3D = $chicken
 
 @onready var fast_run__1_: Node3D = $"chicken/Fast Run (1)"
@@ -17,18 +12,8 @@ signal player_died
 @onready var fast_run_anim: AnimationPlayer = $"chicken/Fast Run (1)/AnimationPlayer"
 @onready var jump_attack_anim: AnimationPlayer = $"chicken/Jump Attack (1)/AnimationPlayer"
 
-
-# =========================================================
-# LANES
-# =========================================================
-
 var positions = [-2.5, 1, 4]
 var cur_pos = 1
-
-
-# =========================================================
-# GRAVITY / JUMP
-# =========================================================
 
 var gravitiy = 64
 var jump_vel = 16
@@ -38,18 +23,8 @@ var jump_vel = 16
 var is_jumping: bool = false
 var is_dead: bool = false
 
-
-# =========================================================
-# RUN ANIMATION SPEED
-# =========================================================
-
 @export var min_run_anim_speed: float = 0.5
 @export var max_run_anim_speed: float = 2.4
-
-
-# =========================================================
-# TURN
-# =========================================================
 
 var base_rotation_y: float = PI
 
@@ -59,11 +34,6 @@ var turn_speed: float = 10.0
 
 var target_turn: float = 0.0
 
-
-# =========================================================
-# PLAYER FBX NODES
-# =========================================================
-
 @onready var node_run: Node3D = $"Fast Run"
 @onready var node_jump: Node3D = $"Jumping"
 @onready var node_die: Node3D = $"Dying Backwards"
@@ -72,37 +42,16 @@ var target_turn: float = 0.0
 @onready var anim_jump: AnimationPlayer = $"Jumping/AnimationPlayer"
 @onready var anim_die: AnimationPlayer = $"Dying Backwards/AnimationPlayer"
 
-
-# =========================================================
-# CAMERA
-# =========================================================
-
 @onready var camera_controller: Node3D = $camera_controller
 
-
-# =========================================================
-# RAYCAST
-# =========================================================
-
 @onready var ray_cast_3d: RayCast3D = $RayCast3D
-
-
-# =========================================================
-# DEBUG
-# =========================================================
 
 var last_debug_collider: Node = null
 var last_debug_time: float = -10.0
 
 @export var debug_cooldown: float = 0.30
 
-# أقل تغيير X نعتبره مهم
 @export var debug_x_threshold: float = 0.005
-
-
-# =========================================================
-# READY
-# =========================================================
 
 func _ready() -> void:
 
@@ -118,11 +67,6 @@ func _ready() -> void:
 	if camera_controller:
 		camera_controller.position = Vector3(0, 2.5, 4.0)
 
-
-	# =====================================================
-	# PLAYER RUN ANIMATION
-	# =====================================================
-
 	if anim_run:
 
 		var run_anim_name = _get_first_anim_name(anim_run)
@@ -133,11 +77,6 @@ func _ready() -> void:
 
 			if run_anim:
 				run_anim.loop_mode = Animation.LOOP_LINEAR
-
-
-	# =====================================================
-	# PLAYER JUMP ANIMATION
-	# =====================================================
 
 	if anim_jump:
 
@@ -150,31 +89,16 @@ func _ready() -> void:
 			if jump_anim:
 				jump_anim.loop_mode = Animation.LOOP_NONE
 
-
-	# =====================================================
-	# JUMP FINISHED SIGNAL
-	# =====================================================
-
 	if anim_jump:
 
 		if not anim_jump.animation_finished.is_connected(_on_jump_finished):
 			anim_jump.animation_finished.connect(_on_jump_finished)
-
-
-	# =====================================================
-	# CHICKEN
-	# =====================================================
 
 	if fast_run__1_:
 		fast_run__1_.visible = true
 
 	if jump_attack__1_:
 		jump_attack__1_.visible = false
-
-
-	# =====================================================
-	# CHICKEN RUN ANIMATION
-	# =====================================================
 
 	if fast_run_anim:
 
@@ -190,27 +114,12 @@ func _ready() -> void:
 			fast_run_anim.speed_scale = 1.0
 			fast_run_anim.play(chicken_run_name)
 
-
-	# =====================================================
-	# START PLAYER RUN
-	# =====================================================
-
 	_play_animation(anim_run, node_run)
-
-
-# =========================================================
-# PHYSICS
-# =========================================================
 
 func _physics_process(delta: float) -> void:
 
 	if is_dead:
 		return
-
-
-	# =====================================================
-	# RUN ANIMATION SPEED
-	# =====================================================
 
 	if anim_run and not is_jumping:
 
@@ -228,18 +137,8 @@ func _physics_process(delta: float) -> void:
 
 		anim_run.speed_scale = run_anim_speed
 
-
-	# =====================================================
-	# RESET HORIZONTAL VELOCITY
-	# =====================================================
-
 	velocity.x = 0.0
 	velocity.z = 0.0
-
-
-	# =====================================================
-	# LANE LEFT
-	# =====================================================
 
 	if Input.is_action_just_pressed("left"):
 
@@ -251,11 +150,6 @@ func _physics_process(delta: float) -> void:
 
 			target_turn = deg_to_rad(turn_angle)
 
-
-	# =====================================================
-	# LANE RIGHT
-	# =====================================================
-
 	elif Input.is_action_just_pressed("right"):
 
 		if cur_pos > 0:
@@ -266,17 +160,7 @@ func _physics_process(delta: float) -> void:
 
 			target_turn = deg_to_rad(-turn_angle)
 
-
-	# =====================================================
-	# SAVE X BEFORE LANE MOVEMENT
-	# =====================================================
-
 	var old_x: float = position.x
-
-
-	# =====================================================
-	# MOVE TO LANE
-	# =====================================================
 
 	position.x = lerpf(
 		position.x,
@@ -288,21 +172,11 @@ func _physics_process(delta: float) -> void:
 
 	var lane_target_x: float = positions[cur_pos]
 
-
-	# =====================================================
-	# PLAYER ROTATION
-	# =====================================================
-
 	rotation.y = lerp_angle(
 		rotation.y,
 		base_rotation_y + target_turn,
 		delta * turn_speed
 	)
-
-
-	# =====================================================
-	# CAMERA COUNTER ROTATION
-	# =====================================================
 
 	if camera_controller:
 
@@ -310,35 +184,19 @@ func _physics_process(delta: float) -> void:
 
 		camera_controller.rotation.y = -current_turn_amount
 
-
 	target_turn = lerp(
 		target_turn,
 		0.0,
 		delta * 8.0
 	)
 
-
-	# =====================================================
-	# ON FLOOR
-	# =====================================================
-
 	if is_on_floor():
 
 		velocity.y = 0.0
 
-
-		# =================================================
-		# LANDED
-		# =================================================
-
 		if is_jumping:
 
 			is_jumping = false
-
-
-			# ---------------------------------------------
-			# START CHICKEN RUN AGAIN
-			# ---------------------------------------------
 
 			if fast_run_anim:
 
@@ -351,22 +209,12 @@ func _physics_process(delta: float) -> void:
 					fast_run_anim.speed_scale = 1.0
 					fast_run_anim.play(chicken_run_name)
 
-
-			# ---------------------------------------------
-			# START PLAYER RUN
-			# ---------------------------------------------
-
 			if not is_dead:
 
 				_play_animation(
 					anim_run,
 					node_run
 				)
-
-
-		# =================================================
-		# JUMP
-		# =================================================
 
 		if Input.is_action_just_pressed("up") and not is_jumping:
 
@@ -376,28 +224,13 @@ func _physics_process(delta: float) -> void:
 
 			$jump.play()
 
-
-			# ---------------------------------------------
-			# STOP CHICKEN RUN
-			# ---------------------------------------------
-
 			if fast_run_anim:
 				fast_run_anim.pause()
-
-
-			# ---------------------------------------------
-			# PLAYER JUMP
-			# ---------------------------------------------
 
 			_play_animation(
 				anim_jump,
 				node_jump
 			)
-
-
-	# =====================================================
-	# IN AIR
-	# =====================================================
 
 	else:
 
@@ -408,11 +241,6 @@ func _physics_process(delta: float) -> void:
 
 		velocity.y -= current_gravity * delta
 
-
-		# =================================================
-		# KEEP PLAYER JUMP MODEL
-		# =================================================
-
 		if is_jumping and not is_dead:
 
 			if node_jump and not node_jump.visible:
@@ -422,11 +250,6 @@ func _physics_process(delta: float) -> void:
 					node_jump
 				)
 
-
-	# =====================================================
-	# CAMERA RESET
-	# =====================================================
-
 	if camera_controller:
 
 		camera_controller.position.x = lerp(
@@ -434,11 +257,6 @@ func _physics_process(delta: float) -> void:
 			0.0,
 			delta * 10.0
 		)
-
-
-	# =====================================================
-	# RAYCAST
-	# =====================================================
 
 	if ray_cast_3d and ray_cast_3d.is_colliding():
 
@@ -456,17 +274,7 @@ func _physics_process(delta: float) -> void:
 
 				return
 
-
-	# =====================================================
-	# MOVE AND SLIDE
-	# =====================================================
-
 	move_and_slide()
-
-
-	# =====================================================
-	# DEBUG AFTER PHYSICS
-	# =====================================================
 
 	var x_after_physics: float = position.x
 
@@ -482,11 +290,6 @@ func _physics_process(delta: float) -> void:
 		x_after_physics,
 		lane_target_x
 	)
-
-
-# =========================================================
-# LANE MOVEMENT DEBUG
-# =========================================================
 
 func _debug_lane_movement(
 	old_x: float,
@@ -538,11 +341,6 @@ func _debug_lane_movement(
 	)
 
 	print("======================================")
-
-
-# =========================================================
-# PHYSICS COLLISION DEBUG
-# =========================================================
 
 func _debug_physics_collision(
 	x_before_physics: float,
@@ -664,11 +462,6 @@ func _debug_physics_collision(
 
 		break
 
-
-# =========================================================
-# RAYCAST DEBUG
-# =========================================================
-
 func _debug_raycast_hit(hit: Node) -> void:
 
 	var current_time: float = (
@@ -720,11 +513,6 @@ func _debug_raycast_hit(hit: Node) -> void:
 
 	print("==================================")
 
-
-# =========================================================
-# CHECK OBSTACLE
-# =========================================================
-
 func _is_obstacle(hit: Node) -> bool:
 
 	var current_node: Node = hit
@@ -744,11 +532,6 @@ func _is_obstacle(hit: Node) -> bool:
 
 	return false
 
-
-# =========================================================
-# DIE
-# =========================================================
-
 func die() -> void:
 
 	if is_dead:
@@ -756,17 +539,7 @@ func die() -> void:
 
 	is_dead = true
 
-
-	# =====================================================
-	# CHICKEN ATTACK
-	# =====================================================
-
 	_chicken_attack()
-
-
-	# =====================================================
-	# STOP PLAYER ANIMATIONS
-	# =====================================================
 
 	if anim_run:
 		anim_run.stop()
@@ -774,18 +547,8 @@ func die() -> void:
 	if anim_jump:
 		anim_jump.stop()
 
-
-	# =====================================================
-	# STOP CHICKEN RUN
-	# =====================================================
-
 	if fast_run_anim:
 		fast_run_anim.stop()
-
-
-	# =====================================================
-	# HIDE PLAYER RUN / JUMP
-	# =====================================================
 
 	if node_run:
 		node_run.visible = false
@@ -793,18 +556,8 @@ func die() -> void:
 	if node_jump:
 		node_jump.visible = false
 
-
-	# =====================================================
-	# SHOW DIE
-	# =====================================================
-
 	if node_die:
 		node_die.visible = true
-
-
-	# =====================================================
-	# DIE ANIMATION
-	# =====================================================
 
 	if anim_die:
 
@@ -827,50 +580,25 @@ func die() -> void:
 					true
 				)
 
-
-	# =====================================================
-	# GAME OVER
-	# =====================================================
-
 	Global.game_on = false
 
 	velocity = Vector3.ZERO
 
 	set_physics_process(false)
 
-
-# =========================================================
-# CHICKEN ATTACK
-# =========================================================
-
 func _chicken_attack() -> void:
 
 	if chicken == null:
 		return
 
-
-	# =====================================================
-	# STOP RUN
-	# =====================================================
-
 	if fast_run_anim:
 		fast_run_anim.stop()
-
-
-	# =====================================================
-	# SWITCH MODEL
-	# =====================================================
 
 	if fast_run__1_:
 		fast_run__1_.visible = false
 
 	if jump_attack__1_:
 		jump_attack__1_.visible = true
-
-
-	# =====================================================
-	# PLAY ATTACK
-	# =====================================================
 
 	if jump_attack_anim:
 
@@ -892,11 +620,6 @@ func _chicken_attack() -> void:
 					attack_anim_name
 				)
 
-
-				# =================================================
-				# MOVE CHICKEN FORWARD
-				# =================================================
-
 				var start_z = chicken.position.z
 
 				var target_z = start_z - 1.0
@@ -916,11 +639,6 @@ func _chicken_attack() -> void:
 					Tween.EASE_OUT
 				)
 
-
-# =========================================================
-# GET FIRST ANIMATION
-# =========================================================
-
 func _get_first_anim_name(
 	player_node: AnimationPlayer
 ) -> String:
@@ -935,19 +653,10 @@ func _get_first_anim_name(
 
 	return ""
 
-
-# =========================================================
-# PLAY PLAYER ANIMATION
-# =========================================================
-
 func _play_animation(
 	target_anim: AnimationPlayer,
 	active_node: Node3D
 ) -> void:
-
-	# =====================================================
-	# STOP ALL
-	# =====================================================
 
 	if anim_run:
 		anim_run.stop()
@@ -958,11 +667,6 @@ func _play_animation(
 	if anim_die:
 		anim_die.stop()
 
-
-	# =====================================================
-	# HIDE ALL MODELS
-	# =====================================================
-
 	if node_run:
 		node_run.visible = false
 
@@ -972,18 +676,8 @@ func _play_animation(
 	if node_die:
 		node_die.visible = false
 
-
-	# =====================================================
-	# SHOW ACTIVE MODEL
-	# =====================================================
-
 	if active_node:
 		active_node.visible = true
-
-
-	# =====================================================
-	# PLAY ANIMATION
-	# =====================================================
 
 	if target_anim:
 
@@ -992,10 +686,6 @@ func _play_animation(
 		)
 
 		if anim_name != "":
-
-			# =============================================
-			# RUN ANIMATION = DEPENDS ON GAME SPEED
-			# =============================================
 
 			if target_anim == anim_run:
 
@@ -1015,16 +705,10 @@ func _play_animation(
 
 				target_anim.speed_scale = 1.0
 
-
 			target_anim.play(
 				anim_name,
 				0.1
 			)
-
-
-# =========================================================
-# JUMP FINISHED
-# =========================================================
 
 func _on_jump_finished(
 	_anim_name: StringName
@@ -1038,11 +722,6 @@ func _on_jump_finished(
 
 	is_jumping = false
 
-
-	# =====================================================
-	# CHICKEN RUN AGAIN
-	# =====================================================
-
 	if fast_run_anim:
 
 		var chicken_run_name = _get_first_anim_name(
@@ -1053,11 +732,6 @@ func _on_jump_finished(
 
 			fast_run_anim.speed_scale = 1.0
 			fast_run_anim.play(chicken_run_name)
-
-
-	# =====================================================
-	# PLAYER RUN AGAIN
-	# =====================================================
 
 	_play_animation(
 		anim_run,
