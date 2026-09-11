@@ -35,7 +35,6 @@ A chasing chicken adds an additional layer of pressure to the gameplay.
 * 🎵 **Background music and sound effects**
 * 🏫 **University-themed 3D environment**
 * 🎮 **Main menu and game-over system**
-* 🌐 **Supabase leaderboard integration planned**
 
 ---
 
@@ -85,7 +84,6 @@ The chicken also has its own animations, including running and attack animations
 * **GDScript**
 * **Blender**
 * **3D Assets / FBX / GLB**
-* **Supabase** — planned for online leaderboard functionality
 
 ---
 
@@ -131,20 +129,6 @@ This means:
 
 Obstacle spawning is also dynamically handled to keep the gameplay challenging while maintaining playable gaps between obstacles.
 
----
-
-## 🏆 Leaderboard
-
-An online leaderboard is planned using **Supabase**.
-
-The leaderboard will allow players to submit their scores and display the top players, including:
-
-* Player name
-* Score
-* High score
-* Top 10 rankings
-
----
 
 ## 🎨 Development
 
